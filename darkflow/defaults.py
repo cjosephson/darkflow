@@ -6,14 +6,14 @@ class argHandler(dict):
     _descriptions = {'help, --h, -h': 'show this super helpful message and exit'}
     
     def setDefaults(self):
-        self.define('imgdir', './sample_img/', 'path to testing directory with images')
-        self.define('binary', './bin/', 'path to .weights directory')
-        self.define('config', './cfg/', 'path to .cfg directory')
-        self.define('dataset', '../pascal/VOCdevkit/IMG/', 'path to dataset directory')
+        self.define('imgdir', 'darkflow/sample_img/', 'path to testing directory with images')
+        self.define('binary', 'darkflow/bin/', 'path to .weights directory')
+        self.define('config', 'darkflow/cfg/', 'path to .cfg directory')
+        self.define('dataset', '.darkflow/pascal/VOCdevkit/IMG/', 'path to dataset directory')
         self.define('labels', 'labels.txt', 'path to labels file')
-        self.define('backup', './ckpt/', 'path to backup folder')
-        self.define('summary', './summary/', 'path to TensorBoard summaries directory')
-        self.define('annotation', '../pascal/VOCdevkit/ANN/', 'path to annotation directory')
+        self.define('backup', 'darkflow/ckpt/', 'path to backup folder')
+        self.define('summary', 'darkflow/summary/', 'path to TensorBoard summaries directory')
+        self.define('annotation', '.darkflow/pascal/VOCdevkit/ANN/', 'path to annotation directory')
         self.define('threshold', -0.1, 'detection threshold')
         self.define('model', '', 'configuration of choice')
         self.define('trainer', 'rmsprop', 'training algorithm')
