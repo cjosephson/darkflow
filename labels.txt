@@ -1,4 +1,6 @@
-aeroplane
 bicycle
+truck
+car
+motorcycle
 bird
 boat
