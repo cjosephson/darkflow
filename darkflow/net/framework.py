@@ -55,5 +55,6 @@ types = {
 
 def create_framework(meta, FLAGS):
     net_type = meta['type']
+    print("net_type:",net_type)
     this = types.get(net_type, framework)
     return this(meta, FLAGS)
