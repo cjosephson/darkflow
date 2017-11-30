@@ -2,12 +2,11 @@ import numpy as np
 import math
 import cv2
 import os
-import json
 #from scipy.special import expit
 #from utils.box import BoundBox, box_iou, prob_compare
 #from utils.box import prob_compare2, box_intersection
-from ...utils.box import BoundBox
-from ...cython_utils.cy_yolo2_findboxes import box_constructor
+from darkflow.utils.box import BoundBox
+from darkflow.cython_utils.cy_yolo2_findboxes import box_constructor
 
 def expit(x):
 	return 1. / (1. + np.exp(-x))
@@ -44,7 +43,7 @@ def postprocess(self, net_out, im, save = True):
 	else: imgcv = im
 	h, w, _ = imgcv.shape
 	
-	resultsForJSON = []
+	textBuff = "["
 	for b in boxes:
 		boxResults = self.process_box(b, h, w, threshold)
 		if boxResults is None:
@@ -52,7 +51,12 @@ def postprocess(self, net_out, im, save = True):
 		left, right, top, bot, mess, max_indx, confidence = boxResults
 		thick = int((h + w) // 300)
 		if self.FLAGS.json:
-			resultsForJSON.append({"label": mess, "confidence": float('%.2f' % confidence), "topleft": {"x": left, "y": top}, "bottomright": {"x": right, "y": bot}})
+			line = 	('{"label":"%s",'
+					'"confidence":%.2f,'
+					'"topleft":{"x":%d,"y":%d},'
+					'"bottomright":{"x":%d,"y":%d}},\n') % \
+					(mess, confidence, left, top, right, bot)
+			textBuff += line
 			continue
 
 		# Bounding box
@@ -77,14 +81,19 @@ def postprocess(self, net_out, im, save = True):
 
 
 	if not save: return imgcv
-
+	else: 
+		textBuff = textBuff[:-2] + "]"
+		return (imgcv, textBuff)
+	
+	'''
+	# Removing trailing comma+newline adding json list terminator.
 	outfolder = os.path.join(self.FLAGS.imgdir, 'out')
 	img_name = os.path.join(outfolder, os.path.basename(im))
 	if self.FLAGS.json:
-		textJSON = json.dumps(resultsForJSON)
 		textFile = os.path.splitext(img_name)[0] + ".json"
 		with open(textFile, 'w') as f:
-			f.write(textJSON)
+			f.write(textBuff)
 		return
 
 	cv2.imwrite(img_name, imgcv)
+	'''
