@@ -81,9 +81,11 @@ def postprocess(self, net_out, im, save = True):
 
 
 	if not save: return imgcv
-	else: 
+	elif len(textBuff) == 1: #case for image with no objects
+		textBuff = textBuff + "]"
+	else:
 		textBuff = textBuff[:-2] + "]"
-		return (imgcv, textBuff)
+	return (imgcv, textBuff)
 	
 	'''
 	# Removing trailing comma+newline adding json list terminator.
